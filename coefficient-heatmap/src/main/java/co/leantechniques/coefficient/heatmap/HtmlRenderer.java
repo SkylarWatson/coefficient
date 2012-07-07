@@ -9,18 +9,27 @@ public class HtmlRenderer {
     public static final int NUMBER_OF_CLASSIFICATIONS = 10;
 
     private Map<String, HeatmapData> files;
-    private final float range;
-    private final Integer floor;
+    private float range;
+    private Integer floor;
 
     public HtmlRenderer(Map<String, HeatmapData> files) {
         this.files = files;
-        ArrayList changeCounts = sorted(files.values());
-        floor = min(changeCounts);
-        range = max(changeCounts) - floor;
     }
 
     public String render() {
-        String heatmap = "<html>" +
+        if(files.isEmpty()) return renderEmptyReport();
+        ArrayList changeCounts = sorted(files.values());
+        floor = min(changeCounts);
+        range = max(changeCounts) - floor;
+        String heatmap = getHtmlHeader();
+        for (String file : sorted(files.keySet())) {
+            heatmap += tagFor(file);
+        }
+        return heatmap + getHtmlFooter();
+    }
+
+    private String getHtmlHeader() {
+        return "<html>" +
                 "<head>" +
                 "<title>SCM Heatmap</title>" +
                 "<style type='text/css'>" +
@@ -31,12 +40,18 @@ public class HtmlRenderer {
                 "</head>" +
                 "<body>" +
                 "<ol>";
-        for (String file : sorted(files.keySet())) {
-            heatmap += tagFor(file);
-        }
-        return heatmap +    "</ol>" +
+    }
+
+    private String getHtmlFooter() {
+        return "</ol>" +
                 "</body>" +
                 "</html>";
+    }
+
+    private String renderEmptyReport() {
+        String heatmap = getHtmlHeader();
+        heatmap += "No Results";
+        return heatmap + getHtmlFooter();
     }
 
     private ArrayList sorted(Collection<HeatmapData> values) {

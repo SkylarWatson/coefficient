@@ -1,10 +1,9 @@
 package co.leantechniques.coefficient.heatmap;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -13,41 +12,15 @@ import static org.junit.Assert.assertThat;
 public class CommitLogParserTest {
 
     private CommitLogParser logParser;
-    private InputStream logInputStream = new InputStream() {
-        @Override
-        public int read() throws IOException {
-            return 0;
-        }
-    };
 
-    @Test
-    public void emptyLogNoMoreCommits(){
-        givenLogContains("");
-
-        assertThat(logParser.hasMoreCommits(), is(false));
+    @Before
+    public void setUp() throws Exception {
+        logParser = new CommitLogParser();
     }
 
     @Test
-    public void hasMoreCommits(){
-        givenLogContains("tim||US1234 some message||File1.java");
-
-        assertThat(logParser.hasMoreCommits(), is(true));
-    }
-
-    @Test
-    public void hasNoMoreCommitsAfterGettingTheLastCommit(){
-        givenLogContains("tim||US1234 some message||File1.java");
-
-        logParser.nextCommit();
-
-        assertThat(logParser.hasMoreCommits(), is(false));
-    }
-
-    @Test
-    public void createFrom(){
-        givenLogContains("tim||US1234 some message||File1.java");
-
-        Commit actual = logParser.nextCommit();
+    public void createFromString(){
+        Commit actual = logParser.getFirstCommit("tim||US1234 some message||File1.java");
 
         assertThat(actual.getAuthor(), is("tim"));
         assertThat(actual.getStory(), is("US1234"));
@@ -56,9 +29,7 @@ public class CommitLogParserTest {
 
     @Test
     public void createWhenDescriptionContainsNewLines(){
-        givenLogContains("tim||US1234 Message with" + System.getProperty("line.separator") + "embedded newline||File1.java");
-
-        Commit actual = logParser.nextCommit();
+        Commit actual = logParser.getFirstCommit("tim||US1234 Message with" + Environment.getLineSeparator() + "embedded newline||File1.java");
         
         assertThat(actual.getAuthor(), is("tim"));
         assertThat(actual.getStory(), is("US1234"));
@@ -67,31 +38,37 @@ public class CommitLogParserTest {
 
     @Test
     public void createWithoutStory(){
-        givenLogContains("tim||Message without story||File1.java");
-
-        Commit actual = logParser.nextCommit();
+        Commit actual = logParser.getFirstCommit("tim||Message without story||File1.java");
 
         assertThat(actual.getStory(), is("Unknown"));
     }
 
     @Test
     public void createForMergeCommitWithoutFiles(){
-        givenLogContains("tim||US1234 Message without files||");
-
-        Commit actual = logParser.nextCommit();
+        Commit actual = logParser.getFirstCommit("tim||US1234 Message without files||");
 
         assertThat(actual.getAuthor(), is("tim"));
         assertThat(actual.getStory(), is("US1234"));
         assertThat(actual.getFiles(), hasSize(0));
     }
 
-    private void givenLogContains(String... commits) {
+    @Test
+    public void createMultipleCommitsWhenLineSeparated(){
+        String logMessageStream = getCommitLog(
+                "tim||US1234 some message||File1.java",
+                "tim||US1234 some message||File1.java",
+                "tim||US1234 some message||File1.java");
+
+        Set<Commit> actualCommits = logParser.getCommits(logMessageStream);
+
+        assertThat(actualCommits, hasSize(3));
+    }
+
+    private String getCommitLog(String... commits) {
         String commitData = "";
         for (String commit : commits) {
-            commitData += commit;
+            commitData += commit + Environment.getLineSeparator();
         }
-
-        logInputStream = new ByteArrayInputStream(commitData.getBytes());
-        logParser = new CommitLogParser(logInputStream);
+        return commitData;
     }
 }

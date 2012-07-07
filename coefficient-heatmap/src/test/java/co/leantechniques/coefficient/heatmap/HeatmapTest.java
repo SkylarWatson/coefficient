@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
@@ -28,7 +29,7 @@ public class HeatmapTest {
 
     @Test
     public void supportsCommitMessagesWithEmbeddedNewlines() {
-        String descriptionWithNewLines = "US1234 Message with" + System.getProperty("line.separator") + "embedded newline";
+        String descriptionWithNewLines = "US1234 Message with" + Environment.getLineSeparator() + "embedded newline";
         givenLogContains(new Commit("tim", descriptionWithNewLines, "File1.java", "File2.java"));
 
         reportFromHg = heatmap.generate();
@@ -42,9 +43,6 @@ public class HeatmapTest {
         givenLogContains(
                 new Commit("tim", "US1234 First message", "File1.java", "File1.java"),
                 new Commit("tim", "", "File2.java", "File3.java"));
-
-//                builder.author("tim").description("US1234 First message").addFiles("File1.java", "File2.java").toCommit(),
-//                builder.author("tim").description("").addFiles("File2.java", "File3.java").toCommit());
 
         reportFromHg = heatmap.generate();
 
@@ -76,6 +74,30 @@ public class HeatmapTest {
         new Heatmap(mockRepository, spy).generate();
 
         assertEquals("write(),close(),", spy.logString);
+    }
+
+    @Test
+    public void noCommits() throws Exception {
+        givenLogContains();
+
+        reportFromHg = heatmap.generate();
+
+        assertThat(reportFromHg, not(containsString("File1.txt")));
+        assertThat(reportFromHg, not(containsString("pom.xml")));
+    }
+
+    @Test
+    public void ignoreNonJavaFiles() throws Exception {
+        givenLogContains(
+                new Commit("tim", "US1234 First message", "File1.txt"),
+                new Commit("tim", "US1234 First message", "File1.java"),
+                new Commit("tim", "US1234 Second message", "pom.xml"));
+
+        reportFromHg = heatmap.generate();
+
+        assertThat(reportFromHg, not(containsString("File1.txt")));
+        assertThat(reportFromHg, containsString("File1.java"));
+        assertThat(reportFromHg, not(containsString("pom.xml")));
     }
 
     private class NullWriter extends Writer {

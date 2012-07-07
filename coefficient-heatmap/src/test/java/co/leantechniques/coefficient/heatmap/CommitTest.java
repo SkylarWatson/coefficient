@@ -4,9 +4,8 @@ import org.junit.Test;
 
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -51,5 +50,14 @@ public class CommitTest {
         Commit commitWithTest = new Commit(null, null, "File1.java");
 
         assertThat(commitWithTest.getStory(), notNullValue());
+    }
+
+    @Test
+    public void isntConfusedByEmbeddedNewlines() throws Exception {
+        String descriptionWithNewLines = "US1234 Some hokey Message".replaceAll(" ", Environment.getLineSeparator());
+        Commit commitWithTest = new Commit("joesmith", descriptionWithNewLines, "File1.java");
+
+        assertThat(commitWithTest.getAuthor(), equalTo("joesmith"));
+        assertThat(commitWithTest.getStory(), equalTo("US1234"));
     }
 }

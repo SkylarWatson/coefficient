@@ -14,7 +14,7 @@ public class AdapterFactoryTest {
         WorkingDirectory hgWorking = mock(WorkingDirectory.class);
         when(hgWorking.getRepoDirectoryName()).thenReturn("hg");
 
-        CodeRepository actual = new AdapterFactory().adapterFor(hgWorking);
+        CodeRepository actual = new AdapterFactory().adapterFor(hgWorking, 90);
 
         assertThat(actual, instanceOf(MercurialCodeRepository.class));
     }

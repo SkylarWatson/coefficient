@@ -1,6 +1,8 @@
 package co.leantechniques.coefficient.heatmap;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChangesetAnalyzer {
     private final CodeRepository codeRepository;
@@ -9,16 +11,42 @@ public class ChangesetAnalyzer {
         this.codeRepository = codeRepository;
     }
 
+    public static boolean fileExists(Map<String, HeatmapData> r, String file) {
+        return r.containsKey(file);
+    }
+
+    public static void initializeCount(Map<String, HeatmapData> r, String file, boolean isDefect) {
+        HeatmapData heatmapdata = new HeatmapData();
+        heatmapdata.changes = 1;
+        if (isDefect) {
+            heatmapdata.defects = 1;
+        }
+        else{
+            heatmapdata.defects = 0;
+        }
+        r.put(file, heatmapdata);
+    }
+
+    public static boolean isDefect(String story) {
+        Matcher matcher = Pattern.compile("DE\\d+").matcher(story);
+        return matcher.find();
+    }
+
+    public static void incrementChangeCountForFile(Map<String, HeatmapData> r, String file, boolean isDefect) {
+        HeatmapData heatmapData = r.get(file);
+        heatmapData.incrementCounters(isDefect);
+    }
+
     public Map<String, Set<String>> getFilesByStory() {
         Set<Commit> commits = codeRepository.getCommits();
-        HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
+        HashMap<String, Set<String>> mapStoryToChangedFiles = new HashMap<String, Set<String>>();
         for(Commit commit : commits){
-            if (map.containsKey(commit.getStory()))
-                map.get(commit.getStory()).addAll(commit.getFiles());
+            if (mapStoryToChangedFiles.containsKey(commit.getStory()))
+                mapStoryToChangedFiles.get(commit.getStory()).addAll(commit.getFiles());
             else
-                map.put(commit.getStory(), commit.getFiles());
+                mapStoryToChangedFiles.put(commit.getStory(), commit.getFiles());
         }
-        return map;
+        return mapStoryToChangedFiles;
     }
 
     public AuthorStatisticSet getAuthorStatistics() {
@@ -49,4 +77,23 @@ public class ChangesetAnalyzer {
 //        return commitStatisticsByAuthor;
 //    }
 
+    Map<String, HeatmapData> changesPerFile() {
+        Map<String, Set<String>> filesByStory = getFilesByStory();
+        Map<String, HeatmapData> numberOfChangesOrganizedByFile = new HashMap<String, HeatmapData>();
+        boolean isDefect;
+        for (String story : filesByStory.keySet()) {
+            isDefect = isDefect(story);
+            for (String file : filesByStory.get(story)) {
+                if(file.endsWith(".java")){
+//                if (includes.contains(GetFileExtension(file))) {
+                    if (fileExists(numberOfChangesOrganizedByFile, file)) {
+                        incrementChangeCountForFile(numberOfChangesOrganizedByFile, file, isDefect);
+                    } else {
+                        initializeCount(numberOfChangesOrganizedByFile, file, isDefect);
+                    }
+                }
+            }
+        }
+        return numberOfChangesOrganizedByFile;
+    }
 }

@@ -44,16 +44,6 @@ public class ChangesetAnalyzer_getFilesByStoryTest {
         assertThat(results.get("US1234"), hasItem("File1.java"));
     }
 
-    @Test
-    public void isntConfusedByEmbeddedNewlines() throws Exception {
-        String descriptionWithNewLines = "US1234 Some hokey Message".replaceAll(" ", System.getProperty("line.separator"));
-        givenCommits.add(new Commit("joesmith", descriptionWithNewLines, "File1.java"));
-
-        results = analyzer.getFilesByStory();
-
-        assertThat(results.keySet(), hasItem("US1234"));
-        assertThat(results.get("US1234"), hasItem("File1.java"));
-    }
 
     @Test
     public void multipleFilesetsForTheSameStoryAreAggregated() throws Exception {

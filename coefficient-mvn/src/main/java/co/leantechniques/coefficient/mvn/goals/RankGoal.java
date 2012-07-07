@@ -26,6 +26,14 @@ public class RankGoal extends AbstractMojo{
     private String scmRoot;
     private ChangesetAnalyzer changesetAnalyzer;
 
+
+    /**
+     * Number of past days to report on. The default is 90 days.
+     *
+     * @parameter default-value="90"
+     */
+    private int rangeLimitInDays = 90;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         AuthorStatisticSet authorStatisticSet = getChangesetAnalyzer().getAuthorStatistics();
@@ -42,12 +50,7 @@ public class RankGoal extends AbstractMojo{
     }
 
     private ChangesetAnalyzer getChangesetAnalyzer() {
-        if(changesetAnalyzer == null) changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot)));
+        if(changesetAnalyzer == null) changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays));
         return changesetAnalyzer;
     }
-
-    public void setChangesetAnalyzer(ChangesetAnalyzer changesetAnalyzer) {
-        this.changesetAnalyzer = changesetAnalyzer;
-    }
-
 }

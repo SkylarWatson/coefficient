@@ -11,10 +11,10 @@ public class AdapterFactory {
         SUPPORTED_ADAPTERS.put("hg", MercurialCodeRepository.class);
     }
 
-    public CodeRepository adapterFor(WorkingDirectory workingDirectory)
+    public CodeRepository adapterFor(WorkingDirectory workingDirectory, int pastDaysLimit)
     {
         try {
-            return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase()).getDeclaredConstructor(WorkingDirectory.class).newInstance(workingDirectory);
+            return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase()).getDeclaredConstructor(int.class).newInstance(pastDaysLimit);
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {

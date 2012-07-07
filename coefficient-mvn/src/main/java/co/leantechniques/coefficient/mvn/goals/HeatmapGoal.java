@@ -39,6 +39,13 @@ public class HeatmapGoal extends AbstractMojo {
      */
     private String scmAdapter;
 
+    /**
+     * Number of past days to report on. The default is 90 days.
+     *
+     * @parameter default-value="90"
+     */
+    private int rangeLimitInDays = 90;
+
     private AdapterFactory factory = new AdapterFactory();
 
     @Override
@@ -46,7 +53,7 @@ public class HeatmapGoal extends AbstractMojo {
         getLog().info("Generating heatmap in " + outputFile);
 
         try {
-            CodeRepository hg = factory.adapterFor(new WorkingDirectory(scmRoot));
+            CodeRepository hg = factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays);
             Heatmap heatmap = new Heatmap(hg, new FileWriter(outputFile()));
             heatmap.generate();
         } catch (IOException e) {

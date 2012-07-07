@@ -1,17 +1,31 @@
 package co.leantechniques.coefficient.heatmap;
 
-import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import static java.util.regex.Pattern.quote;
 
 public class CommitLogParser {
-    final Scanner scanner;
+    Scanner scanner;
     final String messageSeparator = "||";
     final String filesSeparator = "\\s+";
 
-    public CommitLogParser(InputStream logMessageStream) {
+    public Set<Commit> getCommits(String logMessageStream) {
         scanner = new Scanner(logMessageStream);
+        return getCommits();
+    }
+
+    public Commit getFirstCommit(String logMessageStream) {
+        return getCommits(logMessageStream).iterator().next();
+    }
+
+    private Set<Commit> getCommits() {
+        Set<Commit> commits = new HashSet<Commit>();
+        while (hasMoreCommits()) {
+            commits.add(nextCommit());
+        }
+        return commits;
     }
 
     private Commit createFrom(String message) {
@@ -41,11 +55,13 @@ public class CommitLogParser {
         return scanner.nextLine();
     }
 
-    public boolean hasMoreCommits() {
+    private boolean hasMoreCommits() {
         return scanner.hasNextLine();
     }
 
-    public Commit nextCommit() {
+    private Commit nextCommit() {
         return createFrom(nextLine());
     }
+
+
 }
