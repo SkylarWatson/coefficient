@@ -1,5 +1,7 @@
-package co.leantechniques.coefficient.heatmap;
+package co.leantechniques.coefficient.heatmap.mecurial;
 
+import co.leantechniques.coefficient.heatmap.CommandLineAdaptor;
+import co.leantechniques.coefficient.heatmap.CommandLineListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,13 +17,13 @@ public class HgLogCommandTest {
     @Mock
     private CommandLineAdaptor mockCommandLineAdapter;
     @Mock
-    private CommandLineBuilder mockHgCommandLineBuilder;
+    private HgCommandLineBuilder mockHgCommandLineBuilder;
 
     @InjectMocks
     HgLogCommand command = new HgLogCommand();
 
     @Test
-    public void executeCommandLine(){
+    public void executeCommandLine() {
 
         command.execute(90);
 
