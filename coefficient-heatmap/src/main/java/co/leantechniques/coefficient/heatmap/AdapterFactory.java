@@ -1,5 +1,6 @@
 package co.leantechniques.coefficient.heatmap;
 
+import co.leantechniques.coefficient.heatmap.git.GitCodeRepository;
 import co.leantechniques.coefficient.heatmap.mecurial.MercurialCodeRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ public class AdapterFactory {
 
     static {
         SUPPORTED_ADAPTERS.put("hg", MercurialCodeRepository.class);
+        SUPPORTED_ADAPTERS.put("git", GitCodeRepository.class);
     }
 
     public CodeRepository adapterFor(WorkingDirectory workingDirectory, int pastDaysLimit) {
