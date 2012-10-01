@@ -30,7 +30,7 @@ public class HeatmapTest {
     @Test
     public void supportsCommitMessagesWithEmbeddedNewlines() {
         String descriptionWithNewLines = "US1234 Message with" + Environment.getLineSeparator() + "embedded newline";
-        givenLogContains(new Commit("tim", descriptionWithNewLines, "File1.java", "File2.java"));
+        givenLogContains(commit("tim", descriptionWithNewLines, "File1.java", "File2.java"));
 
         reportFromHg = heatmap.generate();
 
@@ -41,8 +41,8 @@ public class HeatmapTest {
     @Test
     public void reportsOnEachFileCommitted() {
         givenLogContains(
-                new Commit("tim", "US1234 First message", "File1.java", "File1.java"),
-                new Commit("tim", "", "File2.java", "File3.java"));
+                commit("tim", "US1234 First message", "File1.java", "File1.java"),
+                commit("tim", "", "File2.java", "File3.java"));
 
         reportFromHg = heatmap.generate();
 
@@ -54,16 +54,12 @@ public class HeatmapTest {
     @Test
     public void multipleCommitsForTheSameTicketAreTreatedAsSingleChange() {
         givenLogContains(
-                new Commit("tim", "US1234 First message", "File1.java"),
-                new Commit("tim", "US1234 Second message", "File1.java"));
+                commit("tim", "US1234 First message", "File1.java"),
+                commit("tim", "US1234 Second message", "File1.java"));
 
         reportFromHg = heatmap.generate();
 
         assertThat(reportFromHg, containsString("File1.java -> Changes: 1  Defects: 0"));
-    }
-
-    private void givenLogContains(Commit... commits) {
-        when(mockRepository.getCommits()).thenReturn(new HashSet<Commit>(Arrays.asList(commits)));
     }
 
     @Test
@@ -89,15 +85,23 @@ public class HeatmapTest {
     @Test
     public void ignoreNonJavaFiles() throws Exception {
         givenLogContains(
-                new Commit("tim", "US1234 First message", "File1.txt"),
-                new Commit("tim", "US1234 First message", "File1.java"),
-                new Commit("tim", "US1234 Second message", "pom.xml"));
+                commit("tim", "US1234 First message", "File1.txt"),
+                commit("tim", "US1234 First message", "File1.java"),
+                commit("tim", "US1234 Second message", "pom.xml"));
 
         reportFromHg = heatmap.generate();
 
         assertThat(reportFromHg, not(containsString("File1.txt")));
         assertThat(reportFromHg, containsString("File1.java"));
         assertThat(reportFromHg, not(containsString("pom.xml")));
+    }
+
+    private Commit commit(String author, String message, String... files) {
+        return new Commit(author, message, files);
+    }
+
+    private void givenLogContains(Commit... commits) {
+        when(mockRepository.getCommits()).thenReturn(new HashSet<Commit>(Arrays.asList(commits)));
     }
 
     private class NullWriter extends Writer {

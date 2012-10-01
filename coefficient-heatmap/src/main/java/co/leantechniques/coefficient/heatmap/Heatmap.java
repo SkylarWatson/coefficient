@@ -16,7 +16,7 @@ public class Heatmap {
 	public String generate() {
         try {
             ChangesetAnalyzer changesetAnalyzer = new ChangesetAnalyzer(codeRepository);
-            Map<String, HeatmapData> files = changesetAnalyzer.changesPerFile();
+            Map<String, FileStatistics> files = changesetAnalyzer.changesPerFile();
             String results = render(files);
             save(results);
             return results;
@@ -25,7 +25,7 @@ public class Heatmap {
         }
     }
 
-    private String render(Map<String, HeatmapData> files) {
+    private String render(Map<String, FileStatistics> files) {
         return new HtmlRenderer(files).render();
     }
 

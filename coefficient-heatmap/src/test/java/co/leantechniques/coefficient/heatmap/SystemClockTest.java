@@ -8,38 +8,41 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class SystemClockTest {
 
-    private SimpleDateFormat dateFormat;
+    public static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
 
     @Before
     public void setUp() throws Exception {
-        setCurrentDateToJanuary10();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SystemClock.setNow(january(10, 2012));
     }
 
     @Test
     public void getCurrentDateWhenSet() throws Exception {
-        assertThat(SystemClock.getCurrentDate(), equalTo(getCurrentDate()));
+        Date date = january(10, 2012);
+        SystemClock.setNow(date);
+
+        assertThat(SystemClock.getCurrentDate(), is(sameInstance(date)));
     }
 
     @Test
     public void add() throws Exception {
         Date fiveDaysLater = SystemClock.addDays(5);
 
-        assertThat(dateFormat.format(fiveDaysLater), equalTo("2012-01-15"));
+        assertThat(pretty(fiveDaysLater), equalTo("2012-01-15"));
     }
 
-    private void setCurrentDateToJanuary10() {
-        Date currentDate = getCurrentDate();
-        SystemClock.setNow(currentDate);
+    private String pretty(Date fiveDaysLater) {
+        return YYYY_MM_DD.format(fiveDaysLater);
     }
 
-    private Date getCurrentDate() {
+    private Date january(int day, int year) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2012, Calendar.JANUARY, 10);
+        calendar.set(year, Calendar.JANUARY, day);
         return calendar.getTime();
     }
 

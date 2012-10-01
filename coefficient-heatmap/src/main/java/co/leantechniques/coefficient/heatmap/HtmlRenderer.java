@@ -8,16 +8,16 @@ public class HtmlRenderer {
     public static final int DIFFERENCE_IN_TAG_SIZE = 3;
     public static final int NUMBER_OF_CLASSIFICATIONS = 10;
 
-    private Map<String, HeatmapData> files;
+    private Map<String, FileStatistics> files;
     private float range;
     private Integer floor;
 
-    public HtmlRenderer(Map<String, HeatmapData> files) {
+    public HtmlRenderer(Map<String, FileStatistics> files) {
         this.files = files;
     }
 
     public String render() {
-        if(files.isEmpty()) return renderEmptyReport();
+        if (files.isEmpty()) return renderEmptyReport();
         ArrayList changeCounts = sorted(files.values());
         floor = min(changeCounts);
         range = max(changeCounts) - floor;
@@ -54,10 +54,10 @@ public class HtmlRenderer {
         return heatmap + getHtmlFooter();
     }
 
-    private ArrayList sorted(Collection<HeatmapData> values) {
+    private ArrayList sorted(Collection<FileStatistics> values) {
         ArrayList<Integer> list = new ArrayList<Integer>();
-        for(HeatmapData changeData : values) {
-            list.add(changeData.changes);
+        for (FileStatistics changeData : values) {
+            list.add(changeData.getTotalChanges());
         }
         Collections.sort(list);
         return list;
@@ -72,30 +72,29 @@ public class HtmlRenderer {
     }
 
     private String tagFor(String file) {
-        return "<li " + styleOf(numberOfChangesTo(file),numberOfDefectsFor(file)) + " title='" + file + " -> " +
-                "Changes: " + numberOfChangesTo(file) +
-                "  Defects: " + numberOfDefectsFor(file) + "'>" + baseNameOf(file) + "</li>";
+        FileStatistics stats = statisticsFor(file);
+        return "<li " + styleOf(stats) +
+                " title='" + file + " -> " + "Changes: " + stats.getTotalChanges() + "  Defects: " + stats.getTotalDefects() +
+                "'>" + baseNameOf(file) + "</li>";
     }
 
-    private Integer numberOfChangesTo(String file) {
-        return files.get(file).changes;
+    private FileStatistics statisticsFor(String file) {
+        return files.get(file);
     }
 
-    private Integer numberOfDefectsFor(String file) {
-        return files.get(file).defects;
-    }
-
-    private String styleOf(int changeCount, int defectCount) {
-        return "style='font-size: " + calculatedSizeFor(changeCount) + ";color: " + calculateColorFor(changeCount, defectCount) + "'";
+    private String styleOf(FileStatistics statistics) {
+        return "style='" +
+                "font-size: " + calculatedSizeFor(statistics.getTotalChanges()) + ";" +
+                "color: " + calculateColorFor(statistics) + "'";
     }
 
     private int calculatedSizeFor(int changeCount) {
         return MINIMUM_SIZE + adjustedSize(changeCount);
     }
 
-    private String calculateColorFor(int changeCount, int defectCount) {
-        double percentOfDefects = ((double) defectCount) / changeCount;
-        int red = (int)(percentOfDefects * 255);
+    private String calculateColorFor(FileStatistics statistics) {
+        double percentOfDefects = statistics.defectRatio();
+        int red = (int) (percentOfDefects * 255);
         if (red == 0)
             return "rgb(211,211,211)";
         else
