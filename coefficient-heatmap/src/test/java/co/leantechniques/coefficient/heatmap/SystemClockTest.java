@@ -1,6 +1,5 @@
 package co.leantechniques.coefficient.heatmap;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,16 +8,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class SystemClockTest {
 
-    public static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
-
     @Before
-    public void setUp() throws Exception {
+    public void setClock() throws Exception {
         SystemClock.setNow(january(10, 2012));
     }
 
@@ -30,12 +26,7 @@ public class SystemClockTest {
     @Test
     public void add() throws Exception {
         Date fiveDaysLater = SystemClock.addDays(5);
-
-        assertThat(pretty(fiveDaysLater), equalTo("2012-01-15"));
-    }
-
-    private String pretty(Date fiveDaysLater) {
-        return YYYY_MM_DD.format(fiveDaysLater);
+        assertThat(fiveDaysLater, equalTo(january(15, 2012)));
     }
 
     private Date january(int day, int year) {
