@@ -1,5 +1,6 @@
 package co.leantechniques.coefficient.heatmap;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,10 +24,7 @@ public class SystemClockTest {
 
     @Test
     public void getCurrentDateWhenSet() throws Exception {
-        Date date = january(10, 2012);
-        SystemClock.setNow(date);
-
-        assertThat(SystemClock.getCurrentDate(), is(sameInstance(date)));
+        assertThat(SystemClock.getCurrentDate(), equalTo(january(10, 2012)));
     }
 
     @Test
@@ -42,6 +40,7 @@ public class SystemClockTest {
 
     private Date january(int day, int year) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(0L);
         calendar.set(year, Calendar.JANUARY, day);
         return calendar.getTime();
     }
