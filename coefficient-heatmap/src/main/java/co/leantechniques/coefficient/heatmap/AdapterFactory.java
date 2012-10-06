@@ -1,18 +1,21 @@
 package co.leantechniques.coefficient.heatmap;
 
+import co.leantechniques.coefficient.heatmap.git.GitCodeRepository;
+import co.leantechniques.coefficient.heatmap.mecurial.MercurialCodeRepository;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public class AdapterFactory {
 
-    public static final HashMap<String,Class<? extends CodeRepository>> SUPPORTED_ADAPTERS = new HashMap<String, Class<? extends CodeRepository>>();
+    public static final HashMap<String, Class<? extends CodeRepository>> SUPPORTED_ADAPTERS = new HashMap<String, Class<? extends CodeRepository>>();
 
     static {
         SUPPORTED_ADAPTERS.put("hg", MercurialCodeRepository.class);
+        SUPPORTED_ADAPTERS.put("git", GitCodeRepository.class);
     }
 
-    public CodeRepository adapterFor(WorkingDirectory workingDirectory, int pastDaysLimit)
-    {
+    public CodeRepository adapterFor(WorkingDirectory workingDirectory, int pastDaysLimit) {
         try {
             return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase()).getDeclaredConstructor(int.class).newInstance(pastDaysLimit);
         } catch (InstantiationException e) {

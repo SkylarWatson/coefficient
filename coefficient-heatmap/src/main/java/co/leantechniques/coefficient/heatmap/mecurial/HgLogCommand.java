@@ -1,9 +1,14 @@
-package co.leantechniques.coefficient.heatmap;
+package co.leantechniques.coefficient.heatmap.mecurial;
+
+import co.leantechniques.coefficient.heatmap.CommandLineAdaptor;
+import co.leantechniques.coefficient.heatmap.CommandLineListener;
+import co.leantechniques.coefficient.heatmap.Environment;
+import co.leantechniques.coefficient.heatmap.LogCommand;
 
 public class HgLogCommand implements LogCommand {
 
     private CommandLineAdaptor commandLineAdapter = new CommandLineAdaptor();
-    private CommandLineBuilder commandLineBuilder = new CommandLineBuilder();
+    private HgCommandLineBuilder commandLineBuilder = new HgCommandLineBuilder();
 
     public HgLogCommand() {
     }
@@ -30,7 +35,7 @@ public class HgLogCommand implements LogCommand {
         this.commandLineAdapter = commandLineAdapter;
     }
 
-    public void setCommandLineBuilder(CommandLineBuilder commandLineBuilder) {
+    public void setCommandLineBuilder(HgCommandLineBuilder commandLineBuilder) {
         this.commandLineBuilder = commandLineBuilder;
     }
 

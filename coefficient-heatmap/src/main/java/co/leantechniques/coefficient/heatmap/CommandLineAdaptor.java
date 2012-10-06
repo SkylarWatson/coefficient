@@ -8,28 +8,28 @@ import java.util.List;
 public class CommandLineAdaptor {
 
     private ProcessBuilder builder = new ProcessBuilder();
-    private Process hgLogProcess;
+    private Process logProcess;
 
-    public void execute(List<String> commandLineArguments, CommandLineListener commandLinelistener){
+    public void execute(List<String> commandLineArguments, CommandLineListener commandLinelistener) {
         start(commandLineArguments);
         processCommand(commandLinelistener);
         end();
     }
 
-    void start(List<String> commandLineArguments){
+    void start(List<String> commandLineArguments) {
         try {
             builder.command(commandLineArguments);
-            hgLogProcess = builder.start();
+            logProcess = builder.start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     void processCommand(CommandLineListener listener) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(hgLogProcess.getInputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(logProcess.getInputStream()));
         String line;
         try {
-            while ((line=reader.readLine())!=null) {
+            while ((line = reader.readLine()) != null) {
                 listener.add(line);
             }
         } catch (IOException e) {
@@ -37,9 +37,9 @@ public class CommandLineAdaptor {
         }
     }
 
-    void end(){
+    void end() {
         try {
-            hgLogProcess.waitFor();
+            logProcess.waitFor();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

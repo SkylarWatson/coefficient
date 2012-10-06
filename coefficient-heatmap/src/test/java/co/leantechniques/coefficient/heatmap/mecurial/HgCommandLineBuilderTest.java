@@ -1,5 +1,6 @@
-package co.leantechniques.coefficient.heatmap;
+package co.leantechniques.coefficient.heatmap.mecurial;
 
+import co.leantechniques.coefficient.heatmap.SystemClock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,13 +11,13 @@ import java.util.GregorianCalendar;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 
-public class CommandLineBuilderTest {
+public class HgCommandLineBuilderTest {
 
-    private CommandLineBuilder commandLineBuilder;
+    private HgCommandLineBuilder commandLineBuilder;
 
     @Before
     public void setUp() throws Exception {
-        commandLineBuilder = new CommandLineBuilder();
+        commandLineBuilder = new HgCommandLineBuilder();
     }
 
     @Test
