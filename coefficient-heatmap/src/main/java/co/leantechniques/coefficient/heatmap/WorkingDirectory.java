@@ -4,16 +4,18 @@ import java.io.File;
 
 public class WorkingDirectory {
     private String path;
+    private String repoDirectoryName;
 
-    public WorkingDirectory(String path) {
+    public WorkingDirectory(String path, String repoDirectoryName) {
         this.path = path;
+        this.repoDirectoryName = repoDirectoryName;
     }
 
     public String getRepoDirectoryName() {
-        return "hg";
+        return repoDirectoryName;
     }
 
-    public String getPath() {
-        return path;
+    public File getPath() {
+        return new File(path);
     }
 }

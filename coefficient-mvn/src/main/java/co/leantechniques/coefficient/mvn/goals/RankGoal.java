@@ -13,9 +13,9 @@ import org.apache.maven.plugin.MojoFailureException;
  * @parameter expression="${project.build.directory}"
  */
 
-public class RankGoal extends AbstractMojo{
+public class RankGoal extends AbstractMojo {
 
-    private AdapterFactory factory = new AdapterFactory();
+    private CodeRepositoryFactory factory = new CodeRepositoryFactory();
 
     /**
      * At this time, the plugin is expected to be configured on the POM located at
@@ -24,6 +24,16 @@ public class RankGoal extends AbstractMojo{
      * @parameter expression="${basedir}"
      */
     private String scmRoot;
+
+    /**
+     * This is the SCM adapter to use (Mercurial, Git, etc.)
+     * For a list of valid SCM systems, please see CodeRepositoryFactoryTest.java
+     *
+     * @parameter expression="hg"
+     */
+    private String scmAdapter;
+
+
     private ChangesetAnalyzer changesetAnalyzer;
 
 
@@ -37,10 +47,10 @@ public class RankGoal extends AbstractMojo{
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         AuthorStatisticSet authorStatisticSet = getChangesetAnalyzer().getAuthorStatistics();
-        getLog().info(String.format("%.2f%% of the %d commits contain test files", authorStatisticSet.getPercentageOfTestedCommits()*100, authorStatisticSet.getTotalCommits()));
+        getLog().info(String.format("%.2f%% of the %d commits contain test files", authorStatisticSet.getPercentageOfTestedCommits() * 100, authorStatisticSet.getTotalCommits()));
 
 
-        for(AuthorStatistic commits : authorStatisticSet.toList()){
+        for (AuthorStatistic commits : authorStatisticSet.toList()) {
             getLog().info(String.format("%.0f%%\t%s\t\t\t(%d of %d commits)",
                     commits.getPercentageOfTestedCommits() * 100,
                     commits.getAuthor(),
@@ -50,7 +60,8 @@ public class RankGoal extends AbstractMojo{
     }
 
     private ChangesetAnalyzer getChangesetAnalyzer() {
-        if(changesetAnalyzer == null) changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays), "DE\\d+");
+        if (changesetAnalyzer == null)
+            changesetAnalyzer = new ChangesetAnalyzer(factory.build(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays),  "DE\\d+");
         return changesetAnalyzer;
     }
 }

@@ -1,4 +1,4 @@
-package co.leantechniques.coefficient.heatmap;
+package co.leantechniques.coefficient.heatmap.mecurial;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ public class HgLogCommandBuilder {
         return null;
     }
 
-    public List<String> getCommandLine(){
+    public List<String> getCommandLine() {
         return commandLine;
     }
 }

@@ -1,9 +1,14 @@
-package co.leantechniques.coefficient.heatmap;
+package co.leantechniques.coefficient.heatmap.mecurial;
+
+import co.leantechniques.coefficient.heatmap.SystemClock;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
-public class CommandLineBuilder {
+public class HgCommandLineBuilder {
     private int previousDaysFilter;
 
     public List<String> getCommandLineArguments() {
@@ -15,7 +20,7 @@ public class CommandLineBuilder {
     }
 
     private void addDateFilter(List<String> commandLineArguments) {
-        if(previousDaysFilter > 0){
+        if (previousDaysFilter > 0) {
             commandLineArguments.add("--date");
             commandLineArguments.add(calculateDateRangeString());
         }
