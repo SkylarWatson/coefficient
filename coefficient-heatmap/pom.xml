@@ -25,19 +25,14 @@
     <dependencies>
 
         <!--<dependency>-->
-            <!--<groupId>com.aragost.javahg</groupId>-->
-            <!--<artifactId>javahg</artifactId>-->
-            <!--<version>0.3</version>-->
+        <!--<groupId>com.aragost.javahg</groupId>-->
+        <!--<artifactId>javahg</artifactId>-->
+        <!--<version>0.3</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>12.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
