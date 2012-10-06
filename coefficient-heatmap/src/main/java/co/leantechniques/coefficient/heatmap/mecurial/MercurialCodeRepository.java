@@ -1,9 +1,6 @@
 package co.leantechniques.coefficient.heatmap.mecurial;
 
-import co.leantechniques.coefficient.heatmap.CodeRepository;
-import co.leantechniques.coefficient.heatmap.Commit;
-import co.leantechniques.coefficient.heatmap.CommitLogParser;
-import co.leantechniques.coefficient.heatmap.LogCommand;
+import co.leantechniques.coefficient.heatmap.*;
 
 import java.util.Set;
 
@@ -11,10 +8,11 @@ public class MercurialCodeRepository implements CodeRepository {
 
     CommitLogParser logParser = new CommitLogParser();
     private LogCommand logCommand = new HgLogCommand();
+    private WorkingDirectory workingDirectory;
     private int rangeLimitInDays;
 
-    // Used for reflection from AdapterFactory
-    public MercurialCodeRepository(int rangeLimitInDays) {
+    public MercurialCodeRepository(WorkingDirectory workingDirectory, int rangeLimitInDays) {
+        this.workingDirectory = workingDirectory;
         this.rangeLimitInDays = rangeLimitInDays;
     }
 

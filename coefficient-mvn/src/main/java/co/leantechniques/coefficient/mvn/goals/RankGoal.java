@@ -15,7 +15,7 @@ import org.apache.maven.plugin.MojoFailureException;
 
 public class RankGoal extends AbstractMojo {
 
-    private AdapterFactory factory = new AdapterFactory();
+    private CodeRepositoryFactory factory = new CodeRepositoryFactory();
 
     /**
      * At this time, the plugin is expected to be configured on the POM located at
@@ -27,7 +27,7 @@ public class RankGoal extends AbstractMojo {
 
     /**
      * This is the SCM adapter to use (Mercurial, Git, etc.)
-     * For a list of valid SCM systems, please see AdapterFactoryTest.java
+     * For a list of valid SCM systems, please see CodeRepositoryFactoryTest.java
      *
      * @parameter expression="hg"
      */
@@ -61,7 +61,7 @@ public class RankGoal extends AbstractMojo {
 
     private ChangesetAnalyzer getChangesetAnalyzer() {
         if (changesetAnalyzer == null)
-            changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays));
+            changesetAnalyzer = new ChangesetAnalyzer(factory.build(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays));
         return changesetAnalyzer;
     }
 }

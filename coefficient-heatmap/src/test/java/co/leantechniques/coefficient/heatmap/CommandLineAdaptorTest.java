@@ -3,6 +3,7 @@ package co.leantechniques.coefficient.heatmap;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +22,15 @@ public class CommandLineAdaptorTest {
     }
 
     @Test
-    public void startUsesTheCommandLineArguments(){
-        doNothing().when(commandLineAdaptor).start(anyList());
+    public void startUsesTheCommandLineArguments() {
+        File workingDirectory = new File("working");
+
+        doNothing().when(commandLineAdaptor).start(eq(workingDirectory), anyList());
         doNothing().when(commandLineAdaptor).processCommand(any(CommandLineListener.class));
         doNothing().when(commandLineAdaptor).end();
 
-        commandLineAdaptor.execute(expectedCommandLineArguments, null);
+        commandLineAdaptor.execute(workingDirectory, expectedCommandLineArguments, null);
 
-        verify(commandLineAdaptor).start(expectedCommandLineArguments);
+        verify(commandLineAdaptor).start(workingDirectory, expectedCommandLineArguments);
     }
 }

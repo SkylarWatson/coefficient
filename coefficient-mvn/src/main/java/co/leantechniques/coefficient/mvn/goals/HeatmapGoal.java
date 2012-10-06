@@ -1,7 +1,7 @@
 package co.leantechniques.coefficient.mvn.goals;
 
-import co.leantechniques.coefficient.heatmap.AdapterFactory;
 import co.leantechniques.coefficient.heatmap.CodeRepository;
+import co.leantechniques.coefficient.heatmap.CodeRepositoryFactory;
 import co.leantechniques.coefficient.heatmap.Heatmap;
 import co.leantechniques.coefficient.heatmap.WorkingDirectory;
 import org.apache.maven.plugin.AbstractMojo;
@@ -37,7 +37,7 @@ public class HeatmapGoal extends AbstractMojo {
     private String scmRoot;
     /**
      * This is the SCM adapter to use (Mercurial, Git, etc.)
-     * For a list of valid SCM systems, please see AdapterFactoryTest.java
+     * For a list of valid SCM systems, please see CodeRepositoryFactoryTest.java
      *
      * @parameter expression="hg"
      */
@@ -50,14 +50,14 @@ public class HeatmapGoal extends AbstractMojo {
      */
     private int rangeLimitInDays = 90;
 
-    private AdapterFactory factory = new AdapterFactory();
+    private CodeRepositoryFactory factory = new CodeRepositoryFactory();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Generating heatmap in " + outputFile);
 
         try {
-            CodeRepository hg = factory.adapterFor(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays);
+            CodeRepository hg = factory.build(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays);
             Heatmap heatmap = new Heatmap(hg, new FileWriter(outputFile()));
             heatmap.generate();
         } catch (IOException e) {
