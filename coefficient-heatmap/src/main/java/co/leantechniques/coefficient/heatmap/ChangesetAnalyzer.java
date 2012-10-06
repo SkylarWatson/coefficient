@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
 
 public class ChangesetAnalyzer {
     private final CodeRepository codeRepository;
+    private final String defectDiscriminator;
 
-    public ChangesetAnalyzer(CodeRepository codeRepository) {
+    public ChangesetAnalyzer(CodeRepository codeRepository, String defectDiscriminator) {
         this.codeRepository = codeRepository;
+        this.defectDiscriminator = defectDiscriminator;
     }
 
     public boolean fileExists(Map<String, FileStatistics> r, String file) {
@@ -18,7 +20,7 @@ public class ChangesetAnalyzer {
     }
 
     public boolean isDefect(String story) {
-        return Pattern.compile("DE\\d+").matcher(story).find();
+        return Pattern.compile(defectDiscriminator).matcher(story).find();
     }
 
     public Map<String, Set<String>> getFilesByStory() {

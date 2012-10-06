@@ -32,7 +32,7 @@ public class HeatmapGoal extends AbstractMojo {
      */
     private String scmRoot;
     /**
-     * This is the SCM adapter to use (Mercurial, Git, etc.)
+     * This is the SCM adapter to use (Mercurial, GitRepository, etc.)
      * For a list of valid SCM systems, please see AdapterFactoryTest.java
      *
      * @parameter expression="hg"
@@ -54,7 +54,7 @@ public class HeatmapGoal extends AbstractMojo {
 
         try {
             CodeRepository hg = factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays);
-            Heatmap heatmap = new Heatmap(hg, new FileWriter(outputFile()));
+            Heatmap heatmap = new Heatmap(hg, new FileWriter(outputFile()), "DE\\d+");
             heatmap.generate();
         } catch (IOException e) {
             throw new RuntimeException(e);

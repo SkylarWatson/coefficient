@@ -7,15 +7,17 @@ import java.util.Map;
 public class Heatmap {
     private Writer writer;
     private CodeRepository codeRepository;
+    private final String defectDiscriminator;
 
-    public Heatmap(CodeRepository codeRepository, Writer writer) {
+    public Heatmap(CodeRepository codeRepository, Writer writer, String defectDiscriminator) {
         this.codeRepository = codeRepository;
         this.writer = writer;
-	}
-    
-	public String generate() {
+        this.defectDiscriminator = defectDiscriminator;
+    }
+
+    public String generate() {
         try {
-            ChangesetAnalyzer changesetAnalyzer = new ChangesetAnalyzer(codeRepository);
+            ChangesetAnalyzer changesetAnalyzer = new ChangesetAnalyzer(codeRepository, defectDiscriminator);
             Map<String, FileStatistics> files = changesetAnalyzer.changesPerFile();
             String results = render(files);
             save(results);

@@ -24,12 +24,13 @@ public class HeatmapTest {
     @Before
     public void setUp() throws Exception {
         mockRepository = mock(CodeRepository.class);
-        heatmap = new Heatmap(mockRepository, new NullWriter());
+        heatmap = new Heatmap(mockRepository, new NullWriter(), "DE\\d+");
     }
 
     @Test
     public void supportsCommitMessagesWithEmbeddedNewlines() {
-        String descriptionWithNewLines = "US1234 Message with" + Environment.getLineSeparator() + "embedded newline";
+        String descriptionWithNewLines = "US1234 Message with" + Environment.getLineSeparator() + "embedded " +
+                Environment.getLineSeparator() + "newline";
         givenLogContains(commit("tim", descriptionWithNewLines, "File1.java", "File2.java"));
 
         reportFromHg = heatmap.generate();
@@ -67,7 +68,7 @@ public class HeatmapTest {
         givenLogContains(new Commit("tim", "US1234 First message", "File1.java"));
 
         WriterSpy spy = new WriterSpy();
-        new Heatmap(mockRepository, spy).generate();
+        new Heatmap(mockRepository, spy, "DE\\d+").generate();
 
         assertEquals("write(),close(),", spy.logString);
     }

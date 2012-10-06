@@ -50,7 +50,7 @@ public class RankGoal extends AbstractMojo{
     }
 
     private ChangesetAnalyzer getChangesetAnalyzer() {
-        if(changesetAnalyzer == null) changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays));
+        if(changesetAnalyzer == null) changesetAnalyzer = new ChangesetAnalyzer(factory.adapterFor(new WorkingDirectory(scmRoot), rangeLimitInDays), "DE\\d+");
         return changesetAnalyzer;
     }
 }
