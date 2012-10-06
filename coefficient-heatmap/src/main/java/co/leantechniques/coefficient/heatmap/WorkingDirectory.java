@@ -1,5 +1,7 @@
 package co.leantechniques.coefficient.heatmap;
 
+import java.io.File;
+
 public class WorkingDirectory {
     private String path;
     private String repoDirectoryName;
@@ -13,7 +15,7 @@ public class WorkingDirectory {
         return repoDirectoryName;
     }
 
-    public String getPath() {
-        return path;
+    public File getPath() {
+        return new File(path);
     }
 }

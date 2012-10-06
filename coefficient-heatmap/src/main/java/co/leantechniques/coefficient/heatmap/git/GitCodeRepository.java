@@ -21,7 +21,7 @@ public class GitCodeRepository implements CodeRepository {
     public Set<Commit> getCommits() {
         GitCommitCapturer commitCapturer = new GitCommitCapturer();
         CommandLineAdaptor adaptor = new CommandLineAdaptor();
-        adaptor.execute(Arrays.asList("git", "log", "--name-only", "--since='" + numberOfDays + " days ago'"), commitCapturer);
+        adaptor.execute(workingDirectory.getPath(), Arrays.asList("git", "log", "--name-only", "--since='" + numberOfDays + " days ago'"), commitCapturer);
         return commitCapturer.getCommits();
     }
 }

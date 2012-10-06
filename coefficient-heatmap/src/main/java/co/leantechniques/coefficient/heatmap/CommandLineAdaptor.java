@@ -10,13 +10,6 @@ public class CommandLineAdaptor {
     private ProcessBuilder builder = new ProcessBuilder();
     private Process logProcess;
 
-    @Deprecated
-    public void execute(List<String> commandLineArguments, CommandLineListener commandLinelistener) {
-        start(null, commandLineArguments);
-        processCommand(commandLinelistener);
-        end();
-    }
-
     public void execute(File workingDirectory, List<String> commandLineArguments, CommandLineListener commandLinelistener) {
         start(workingDirectory, commandLineArguments);
         processCommand(commandLinelistener);

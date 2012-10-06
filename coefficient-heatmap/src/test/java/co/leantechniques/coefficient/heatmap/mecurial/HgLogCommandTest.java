@@ -8,8 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
+import java.io.File;
+
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,11 +25,12 @@ public class HgLogCommandTest {
 
     @Test
     public void executeCommandLine() {
+        File workingDirectory = new File("working");
 
-        command.execute(90);
+        command.execute(workingDirectory, 90);
 
         verify(mockHgCommandLineBuilder).setRangeLimitInDays(90);
         verify(mockHgCommandLineBuilder).getCommandLineArguments();
-        verify(mockCommandLineAdapter).execute(anyListOf(String.class), any(CommandLineListener.class));
+        verify(mockCommandLineAdapter).execute(eq(workingDirectory), anyListOf(String.class), any(CommandLineListener.class));
     }
 }
