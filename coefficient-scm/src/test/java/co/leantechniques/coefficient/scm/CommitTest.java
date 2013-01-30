@@ -63,7 +63,8 @@ public class CommitTest {
         Commit commit = new Commit(null, null, "com/example/File1.java",
                 "com/example/File1Test.java",
                 "com/example/File2.properties",
-                "com/example/File3.xml");
+                "com/example/File3.xml",
+                "pom.xml");
 
         assertEquals(100, commit.getPercentFilesWIthTests());
     }

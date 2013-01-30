@@ -45,7 +45,8 @@ public class Commit {
         double numberOfUnitTests = 0;
         for(String file : files) {
             Matcher m = p.matcher(file);
-            m.matches();
+            if(!m.matches())
+                continue;
             if(isSourceFile(m)) {
                 numberOfSourceFilesChanged++;
                 if(isTestFile(m)) {
@@ -54,9 +55,12 @@ public class Commit {
             }
         }
 
-        double numberOfProductionClasses = (numberOfSourceFilesChanged - numberOfUnitTests);
+        double numberOfProductionClasses = ((int) numberOfSourceFilesChanged - (int) numberOfUnitTests);
 
-        return (int) (((numberOfUnitTests / numberOfProductionClasses) * 100));
+        if(numberOfProductionClasses == 0)
+            return 100;
+
+        return (int) (((numberOfUnitTests / (int) numberOfProductionClasses) * 100));
     }
 
     private boolean isTestFile(Matcher m) {

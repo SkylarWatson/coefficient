@@ -10,6 +10,7 @@ public class CoEfficientTestRatio implements TestRatioListener {
         CommitsWithTestRatio app = new CommitsWithTestRatio();
         CodeRepositoryFactory codeRepositoryFactory = new CodeRepositoryFactory();
         app.setCodeRepository(codeRepositoryFactory.build(new WorkingDirectory(".", "git"), 7));
+        app.setTestRatioListener(coEfficientTestRatio);
         app.process();
     }
     @Override
