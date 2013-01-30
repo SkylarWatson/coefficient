@@ -2,7 +2,7 @@ package co.leantechniques.coefficient.scm.mercurial;
 
 import co.leantechniques.coefficient.scm.CommandLineAdaptor;
 import co.leantechniques.coefficient.scm.CommandLineListener;
-import co.leantechniques.coefficient.scm.Environment;
+import co.leantechniques.coefficient.core.Environment;
 
 import java.io.File;
 

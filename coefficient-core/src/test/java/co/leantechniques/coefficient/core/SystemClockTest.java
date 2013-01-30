@@ -1,6 +1,5 @@
-package co.leantechniques.coefficient.scm;
+package co.leantechniques.coefficient.core;
 
-import co.leantechniques.coefficient.scm.SystemClock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class SystemClockTest {

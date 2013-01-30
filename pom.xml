@@ -21,6 +21,7 @@
         <module>coefficient-heatmap</module>
         <module>coefficient-test-ratios</module>
         <module>coefficient-scm</module>
+        <module>coefficient-core</module>
     </modules>
     <repositories>
         <repository>

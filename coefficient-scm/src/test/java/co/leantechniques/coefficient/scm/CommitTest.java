@@ -1,7 +1,6 @@
 package co.leantechniques.coefficient.scm;
 
-import co.leantechniques.coefficient.scm.Commit;
-import co.leantechniques.coefficient.scm.Environment;
+import co.leantechniques.coefficient.core.Environment;
 import org.junit.Test;
 
 import java.util.Set;

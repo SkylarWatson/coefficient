@@ -1,5 +1,6 @@
 package co.leantechniques.coefficient.scm;
 
+import co.leantechniques.coefficient.core.Environment;
 import org.junit.Before;
 import org.junit.Test;
 

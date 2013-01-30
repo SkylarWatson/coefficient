@@ -1,6 +1,6 @@
 package co.leantechniques.coefficient.scm.mercurial;
 
-import co.leantechniques.coefficient.scm.SystemClock;
+import co.leantechniques.coefficient.core.SystemClock;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

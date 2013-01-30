@@ -1,4 +1,4 @@
-package co.leantechniques.coefficient.scm;
+package co.leantechniques.coefficient.core;
 
 import java.util.Calendar;
 import java.util.Date;
