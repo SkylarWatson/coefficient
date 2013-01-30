@@ -10,11 +10,14 @@ public class CommitsWithTestRatio {
     private TestRatioListener testRatioListener;
 
     public void process() {
+        int percentTested = 0;
+
         Set<Commit> commits = codeRepository.getCommits();
         for(Commit c : commits) {
-
+            percentTested += c.getPercentFilesWIthTests();
         }
-        testRatioListener.testRatioCalculated(50);
+
+        testRatioListener.testRatioCalculated(percentTested / commits.size());
     }
 
     public void setCodeRepository(co.leantechniques.coefficient.scm.CodeRepository codeRepository) {

@@ -21,8 +21,8 @@ public class CommitsWithTestRatioTest {
         ratio.setTestRatioListener(listener);
 
         HashSet<Commit> commits = new HashSet<Commit>();
-        commits.add(new Commit("Brandon", "DE1234", "File1.java", "File1Test.java"));
-        commits.add(new Commit("Brandon", "US1234", "File1.java", "File2.java"));
+        commits.add(new Commit("Brandon", "DE1234", "com/example/File1.java", "com/example/File1Test.java"));
+        commits.add(new Commit("Brandon", "US1234", "com/example/File1.java", "com/example/File2.java"));
 
         when(repo.getCommits()).thenReturn(commits);
 
