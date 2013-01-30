@@ -1,7 +1,7 @@
 package co.leantechniques.coefficient.scm.git;
 
 import co.leantechniques.coefficient.scm.CodeRepository;
-import co.leantechniques.coefficient.scm.CommandLineAdaptor;
+import co.leantechniques.coefficient.core.CommandLineAdaptor;
 import co.leantechniques.coefficient.scm.Commit;
 import co.leantechniques.coefficient.scm.WorkingDirectory;
 

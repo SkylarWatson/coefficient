@@ -1,7 +1,5 @@
-package co.leantechniques.coefficient.scm;
+package co.leantechniques.coefficient.core;
 
-import co.leantechniques.coefficient.scm.CommandLineAdaptor;
-import co.leantechniques.coefficient.scm.CommandLineListener;
 import org.junit.Before;
 import org.junit.Test;
 

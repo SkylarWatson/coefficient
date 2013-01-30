@@ -1,6 +1,6 @@
 package co.leantechniques.coefficient.scm.git;
 
-import co.leantechniques.coefficient.scm.CommandLineListener;
+import co.leantechniques.coefficient.core.CommandLineListener;
 import co.leantechniques.coefficient.scm.Commit;
 
 import java.util.ArrayList;
