@@ -36,12 +36,34 @@ public class Commit {
     }
 
     public boolean containsTests() {
-        for(String fileName : files){
-            if(fileName.toLowerCase().endsWith("test.java")){
-                return true;
-            }
-        }
-        return false;
+        return getPercentFilesWIthTests() > 0;
     }
 
+    public int getPercentFilesWIthTests() {
+        Pattern p = Pattern.compile(".*/(Test)?(\\w+?)(Test)?\\.(\\w+)");
+        double numberOfSourceFilesChanged = 0;
+        double numberOfUnitTests = 0;
+        for(String file : files) {
+            Matcher m = p.matcher(file);
+            m.matches();
+            if(isSourceFile(m)) {
+                numberOfSourceFilesChanged++;
+                if(isTestFile(m)) {
+                    numberOfUnitTests++;
+                }
+            }
+        }
+
+        double numberOfProductionClasses = (numberOfSourceFilesChanged - numberOfUnitTests);
+
+        return (int) (((numberOfUnitTests / numberOfProductionClasses) * 100));
+    }
+
+    private boolean isTestFile(Matcher m) {
+        return m.group(1) != null || m.group(3) != null;
+    }
+
+    private boolean isSourceFile(Matcher m) {
+        return m.group(4).equals("java");
+    }
 }

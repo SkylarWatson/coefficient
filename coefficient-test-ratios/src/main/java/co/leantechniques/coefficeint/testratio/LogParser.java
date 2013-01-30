@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class LogParser {
 
-    public static final Pattern FILENAME_PATTERN = Pattern.compile(".*/(Test)?(\\w+?)(Test)?\\.(\\w+)");
     private final String commitDelimiter;
     private final String sourceFileExtension;
 
@@ -26,7 +25,7 @@ public class LogParser {
             int numberOfUnitTestFiles = 0;
 
             for (String file : allFilesInThisCommit) {
-                Matcher m = FILENAME_PATTERN.matcher(file);
+                Matcher m = Pattern.compile(".*/(Test)?(\\w+?)(Test)?\\.(\\w+)").matcher(file);
                 m.matches();
 
                 if (fileIsSourceCode(m)) {

@@ -51,9 +51,9 @@ public class ChangesetAnalyzer_getAuthorStatisticsTest {
 
     private Set<Commit> getExpectedCommits() {
         Set<Commit> expectedCommits = new HashSet<Commit>();
-        expectedCommits.add(new Commit("tim", "US1000 first message", "file1.java", "file2.java"));
-        expectedCommits.add(new Commit("tim", "US1000 Some message", "file1.java", "file1Test.java"));
-        expectedCommits.add(new Commit("joe", "US2000 Joe wrote this message", "file2.java", "file2Test.java"));
+        expectedCommits.add(new Commit("tim", "US1000 first message", "com/example/file1.java", "com/example/file2.java"));
+        expectedCommits.add(new Commit("tim", "US1000 Some message", "com/example/file1.java", "com/example/file1Test.java"));
+        expectedCommits.add(new Commit("joe", "US2000 Joe wrote this message", "com/example/file2.java", "com/example/file2Test.java"));
         return expectedCommits;
     }
 }

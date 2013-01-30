@@ -8,6 +8,7 @@ import java.util.Set;
 import static junit.framework.Assert.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class CommitTest {
@@ -34,16 +35,37 @@ public class CommitTest {
     
     @Test
     public void knowsWhenCommitContainsATest(){
-        Commit commitWithTest = new Commit(null, null, "File1.java", "File1Test.java");
+        Commit commitWithTest = new Commit(null, null, "com/example/File1.java", "com/example/File1Test.java");
         
         assertTrue(commitWithTest.containsTests());
     }
 
     @Test
     public void knowsWhenCommitNotTested(){
-        Commit commitWithTest = new Commit(null, null, "File1.java");
+        Commit commitWithTest = new Commit(null, null, "com/example/File1.java");
 
         assertFalse(commitWithTest.containsTests());
+    }
+
+    @Test
+    public void knowsThePercentageOfSourceFilesThatHaveTests() {
+        Commit commit = new Commit(null, null, "com/example/File1.java",
+                "com/example/File1Test.java",
+                "com/example/File2.java",
+                "com/example/TestFile2.java",
+                "com/example/File3.java");
+
+        assertEquals(66, commit.getPercentFilesWIthTests());
+    }
+
+    @Test
+    public void doesntConsiderNonSourceFilesInCalculations() {
+        Commit commit = new Commit(null, null, "com/example/File1.java",
+                "com/example/File1Test.java",
+                "com/example/File2.properties",
+                "com/example/File3.xml");
+
+        assertEquals(100, commit.getPercentFilesWIthTests());
     }
 
     @Test

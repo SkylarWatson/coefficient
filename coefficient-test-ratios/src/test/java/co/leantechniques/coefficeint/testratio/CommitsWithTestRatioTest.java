@@ -1,29 +1,34 @@
 package co.leantechniques.coefficeint.testratio;
 
+import co.leantechniques.coefficient.scm.CodeRepository;
+import co.leantechniques.coefficient.scm.Commit;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.HashSet;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CommitsWithTestRatioTest {
     @Test
-    public void retrievesHistoryFromScmAndPassesItToTheParser() {
-        CommitsWithTestRatio ap = new CommitsWithTestRatio();
-        ScmAdapter scmAdapter = mock(ScmAdapter.class);
-        LogParser parser = mock(LogParser.class);
-        when(scmAdapter.log()).thenReturn("scm changeset data");
-        when(parser.execute("scm changeset data")).thenReturn(Arrays.asList(new LogEntry(10, 5, 5), new LogEntry(10, 5, 0)));
-        ap.setScmAdapter(scmAdapter);
-        ap.setLogParser(parser);
-        MyListener listener = mock(MyListener.class);
-        ap.setListener(listener);
+    public void doesStuff() {
+        CodeRepository repo = mock(CodeRepository.class);
+        TestRatioListener listener = mock(TestRatioListener.class);
 
-        ap.process();
+        CommitsWithTestRatio ratio = new CommitsWithTestRatio();
+        ratio.setCodeRepository(repo);
+        ratio.setTestRatioListener(listener);
 
-        verify(scmAdapter).log();
-        verify(parser).execute("scm changeset data");
-        verify(listener).onCommitAnalysisComplete(50);
+        HashSet<Commit> commits = new HashSet<Commit>();
+        commits.add(new Commit("Brandon", "DE1234", "File1.java", "File1Test.java"));
+        commits.add(new Commit("Brandon", "US1234", "File1.java", "File2.java"));
+
+        when(repo.getCommits()).thenReturn(commits);
+
+        ratio.process();
+
+        verify(listener).testRatioCalculated(50);
     }
 
 }
