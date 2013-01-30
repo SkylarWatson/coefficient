@@ -1,4 +1,4 @@
-package co.leantechniques.coefficient.heatmap.git;
+package co.leantechniques.coefficient.scm.git;
 
 import co.leantechniques.coefficient.scm.Commit;
 import co.leantechniques.coefficient.scm.git.GitCommitBuilder;
