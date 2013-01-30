@@ -1,6 +1,8 @@
 package co.leantechniques.coefficient.mvn.goals;
 
 import co.leantechniques.coefficient.heatmap.*;
+import co.leantechniques.coefficient.scm.CodeRepositoryFactory;
+import co.leantechniques.coefficient.scm.WorkingDirectory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -27,7 +29,7 @@ public class RankGoal extends AbstractMojo {
 
     /**
      * This is the SCM adapter to use (Mercurial, Git, etc.)
-     * For a list of valid SCM systems, please see CodeRepositoryFactoryTest.java
+     * For a list of valid SCM systems, please see co.leantechniques.coefficient.scm.CodeRepositoryFactoryTest.java
      *
      * @parameter expression="hg"
      */

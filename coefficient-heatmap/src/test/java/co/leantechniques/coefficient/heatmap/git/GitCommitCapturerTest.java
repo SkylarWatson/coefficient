@@ -1,6 +1,8 @@
 package co.leantechniques.coefficient.heatmap.git;
 
-import co.leantechniques.coefficient.heatmap.Commit;
+import co.leantechniques.coefficient.scm.Commit;
+import co.leantechniques.coefficient.scm.git.GitCommitBuilder;
+import co.leantechniques.coefficient.scm.git.GitCommitCapturer;
 import org.junit.Before;
 import org.junit.Test;
 

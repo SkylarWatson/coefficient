@@ -1,5 +1,7 @@
 package co.leantechniques.coefficient.heatmap;
 
+import co.leantechniques.coefficient.scm.CodeRepository;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;

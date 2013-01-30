@@ -1,5 +1,7 @@
 package co.leantechniques.coefficient.heatmap;
 
+import co.leantechniques.coefficient.scm.CodeRepository;
+import co.leantechniques.coefficient.scm.Commit;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,9 +1,9 @@
 package co.leantechniques.coefficient.mvn.goals;
 
-import co.leantechniques.coefficient.heatmap.CodeRepository;
-import co.leantechniques.coefficient.heatmap.CodeRepositoryFactory;
+import co.leantechniques.coefficient.scm.CodeRepository;
+import co.leantechniques.coefficient.scm.CodeRepositoryFactory;
 import co.leantechniques.coefficient.heatmap.Heatmap;
-import co.leantechniques.coefficient.heatmap.WorkingDirectory;
+import co.leantechniques.coefficient.scm.WorkingDirectory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -37,7 +37,7 @@ public class HeatmapGoal extends AbstractMojo {
     private String scmRoot;
     /**
      * This is the SCM adapter to use (Mercurial, Git, etc.)
-     * For a list of valid SCM systems, please see CodeRepositoryFactoryTest.java
+     * For a list of valid SCM systems, please see co.leantechniques.coefficient.scm.CodeRepositoryFactoryTest.java
      *
      * @parameter expression="hg"
      */

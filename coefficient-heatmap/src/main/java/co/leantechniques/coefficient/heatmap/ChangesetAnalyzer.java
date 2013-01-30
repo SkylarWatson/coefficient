@@ -1,9 +1,11 @@
 package co.leantechniques.coefficient.heatmap;
 
+import co.leantechniques.coefficient.scm.CodeRepository;
+import co.leantechniques.coefficient.scm.Commit;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChangesetAnalyzer {
