@@ -5,11 +5,11 @@ import co.leantechniques.coefficient.scm.Commit;
 
 import java.util.Set;
 
-public class CommitsWithTestRatio {
+public class TestRatio {
     private CodeRepository codeRepository;
     private TestRatioListener testRatioListener;
 
-    public void process() {
+    public void calculate() {
         int percentTested = 0;
 
         Set<Commit> commits = codeRepository.getCommits();

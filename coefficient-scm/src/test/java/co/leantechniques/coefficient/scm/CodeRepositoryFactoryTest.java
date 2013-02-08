@@ -24,6 +24,22 @@ public class CodeRepositoryFactoryTest {
         assertIsType(GitCodeRepository.class, factory.build(workingDirectoryFor("git"), 90));
     }
 
+    @Test
+    public void supportsGit() {
+        assertIsType(GitCodeRepository.class, factory.build(mockRepository("git"), 0));
+    }
+
+    @Test
+    public void supportsMercurial() {
+        assertIsType(MercurialCodeRepository.class, factory.build(mockRepository("hg"), 0));
+    }
+
+    private WorkingDirectory mockRepository(String repositoryType) {
+        WorkingDirectory gitRepoDirectory = mock(WorkingDirectory.class);
+        when(gitRepoDirectory.directoryExists("." + repositoryType)).thenReturn(true);
+        return gitRepoDirectory;
+    }
+
     private void assertIsType(Class expectedRepositoryType, CodeRepository actualRepository) {
         assertTrue("Expected repo of type: " + expectedRepositoryType + ", but got " + actualRepository.getClass(),
                 expectedRepositoryType.isInstance(actualRepository));

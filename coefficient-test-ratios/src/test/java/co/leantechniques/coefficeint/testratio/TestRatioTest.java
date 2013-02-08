@@ -10,13 +10,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CommitsWithTestRatioTest {
+public class TestRatioTest {
     @Test
     public void doesStuff() {
         CodeRepository repo = mock(CodeRepository.class);
         TestRatioListener listener = mock(TestRatioListener.class);
 
-        CommitsWithTestRatio ratio = new CommitsWithTestRatio();
+        TestRatio ratio = new TestRatio();
         ratio.setCodeRepository(repo);
         ratio.setTestRatioListener(listener);
 
@@ -26,7 +26,7 @@ public class CommitsWithTestRatioTest {
 
         when(repo.getCommits()).thenReturn(commits);
 
-        ratio.process();
+        ratio.calculate();
 
         verify(listener).testRatioCalculated(50);
     }

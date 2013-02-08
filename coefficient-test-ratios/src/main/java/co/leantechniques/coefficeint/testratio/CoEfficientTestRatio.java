@@ -6,13 +6,15 @@ import co.leantechniques.coefficient.scm.WorkingDirectory;
 public class CoEfficientTestRatio implements TestRatioListener {
     public static void main(String[] args) {
         CoEfficientTestRatio coEfficientTestRatio = new CoEfficientTestRatio();
-
-        CommitsWithTestRatio app = new CommitsWithTestRatio();
         CodeRepositoryFactory codeRepositoryFactory = new CodeRepositoryFactory();
-        app.setCodeRepository(codeRepositoryFactory.build(new WorkingDirectory(".", "git"), 7));
-        app.setTestRatioListener(coEfficientTestRatio);
-        app.process();
+
+        TestRatio ratio = new TestRatio();
+        ratio.setCodeRepository(codeRepositoryFactory.build(new WorkingDirectory("."), 365));
+        ratio.setTestRatioListener(coEfficientTestRatio);
+
+        ratio.calculate();
     }
+
     @Override
     public void testRatioCalculated(int percentOfCommitsWithTests) {
         System.out.println(percentOfCommitsWithTests);

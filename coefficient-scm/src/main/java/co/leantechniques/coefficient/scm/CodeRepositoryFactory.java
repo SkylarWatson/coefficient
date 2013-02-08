@@ -25,6 +25,15 @@ public class CodeRepositoryFactory {
     }
 
     private Class<? extends CodeRepository> determineTypeOfCodeRepository(WorkingDirectory workingDirectory) {
-        return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase());
+        if (SUPPORTED_ADAPTERS.containsKey(workingDirectory.getRepoDirectoryName()))
+            return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase());
+
+        if (workingDirectory.directoryExists(".git"))
+            return GitCodeRepository.class;
+        if (workingDirectory.directoryExists(".hg"))
+            return MercurialCodeRepository.class;
+        else
+            return null;
     }
+
 }

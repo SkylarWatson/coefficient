@@ -2,3 +2,4 @@ target
 *.iml
 .idea
 .DS_Store
+coefficient-test-ratios/dependency-reduced-pom.xml
