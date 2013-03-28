@@ -34,4 +34,8 @@ public class WorkingDirectory {
     public boolean directoryExists(String directoryName) {
         return getSubdirectory(directoryName).exists();
     }
+
+    public String toString() {
+        return path;
+    }
 }

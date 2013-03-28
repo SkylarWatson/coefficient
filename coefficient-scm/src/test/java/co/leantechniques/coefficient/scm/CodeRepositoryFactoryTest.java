@@ -18,10 +18,9 @@ public class CodeRepositoryFactoryTest {
         factory = new CodeRepositoryFactory();
     }
 
-    @Test
-    public void determineBasedOnRepositoryLocation() {
-        assertIsType(MercurialCodeRepository.class, factory.build(workingDirectoryFor("hg"), 90));
-        assertIsType(GitCodeRepository.class, factory.build(workingDirectoryFor("git"), 90));
+    @Test(expected = UnsupportedOperationException.class)
+    public void raisesExceptionWhenRepositoryIsNotFoundInTheWorkingDirectory() {
+        factory.build(mockRepository("unknown"), 0);
     }
 
     @Test

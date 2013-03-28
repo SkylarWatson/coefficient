@@ -11,29 +11,28 @@ public class CodeRepositoryFactory {
     public static final HashMap<String, Class<? extends CodeRepository>> SUPPORTED_ADAPTERS = new HashMap<String, Class<? extends CodeRepository>>();
 
     static {
-        SUPPORTED_ADAPTERS.put("hg", MercurialCodeRepository.class);
-        SUPPORTED_ADAPTERS.put("git", GitCodeRepository.class);
+        SUPPORTED_ADAPTERS.put(".hg", MercurialCodeRepository.class);
+        SUPPORTED_ADAPTERS.put(".git", GitCodeRepository.class);
     }
 
     public CodeRepository build(WorkingDirectory workingDirectory, int pastDaysLimit) {
+        Class<? extends CodeRepository> codeRepositoryClass = determineTypeOfCodeRepositoryIn(workingDirectory);
         try {
-            Class<? extends CodeRepository> codeRepositoryClass = determineTypeOfCodeRepository(workingDirectory);
             return ConstructorUtils.invokeConstructor(codeRepositoryClass, workingDirectory, pastDaysLimit);
         } catch (Exception e) {
             throw new RuntimeException("A problem occurred when trying to construct an instance of the " + CodeRepository.class.getName(), e);
         }
     }
 
-    private Class<? extends CodeRepository> determineTypeOfCodeRepository(WorkingDirectory workingDirectory) {
-        if (SUPPORTED_ADAPTERS.containsKey(workingDirectory.getRepoDirectoryName()))
-            return SUPPORTED_ADAPTERS.get(workingDirectory.getRepoDirectoryName().toLowerCase());
+    private Class<? extends CodeRepository> determineTypeOfCodeRepositoryIn(WorkingDirectory workingDirectory) {
 
-        if (workingDirectory.directoryExists(".git"))
-            return GitCodeRepository.class;
-        if (workingDirectory.directoryExists(".hg"))
-            return MercurialCodeRepository.class;
-        else
-            return null;
+        for (String scmDirectory : SUPPORTED_ADAPTERS.keySet()) {
+            if (workingDirectory.directoryExists(scmDirectory)) {
+                return SUPPORTED_ADAPTERS.get(scmDirectory);
+            }
+        }
+
+        throw new UnsupportedOperationException("Unable to determine repository type found in " + workingDirectory);
     }
 
 }

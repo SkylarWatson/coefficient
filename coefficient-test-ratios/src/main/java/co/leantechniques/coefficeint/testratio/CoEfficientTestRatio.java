@@ -9,7 +9,9 @@ public class CoEfficientTestRatio implements TestRatioListener {
         CodeRepositoryFactory codeRepositoryFactory = new CodeRepositoryFactory();
 
         TestRatio ratio = new TestRatio();
-        ratio.setCodeRepository(codeRepositoryFactory.build(new WorkingDirectory("."), 365));
+        int pastDaysLimit = 365;
+        System.out.println("args[0] = " + args[0]);
+        ratio.setCodeRepository(codeRepositoryFactory.build(new WorkingDirectory("."), pastDaysLimit));
         ratio.setTestRatioListener(coEfficientTestRatio);
 
         ratio.calculate();
