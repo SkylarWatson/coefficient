@@ -1,14 +1,13 @@
 package co.leantechniques.coefficient.scm;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Commit {
-    public static final Pattern FILENAME_PATTERN = Pattern.compile(".*/(\\w+?)(Test)?\\.(\\w+)");
+    public static final Pattern SOURCE_FILENAME_PATTERN = Pattern.compile(".*/(\\w+?)(Test)?\\.(\\w+)");
     private String message;
     private final Set<String> files;
     private final String author;
@@ -38,14 +37,21 @@ public class Commit {
     }
 
     public boolean containsTests() {
-        return getPercentFilesWIthTests() > 0;
+        for (String file : files) {
+            Matcher m = Pattern.compile(".*/(\\w+?)(Test)?\\.(\\w+)").matcher(file);
+            if (!m.matches())
+                continue;
+
+            if (isTestFile(m)) return true;
+        }
+        return false;
     }
 
     public int getPercentFilesWIthTests() {
         HashSet<String> productionFiles = new HashSet<String>();
         HashSet<String> testFiles = new HashSet<String>();
         for (String file : files) {
-            Matcher m = FILENAME_PATTERN.matcher(file);
+            Matcher m = SOURCE_FILENAME_PATTERN.matcher(file);
             if (!m.matches())
                 continue;
             String baseName = m.group(1);
@@ -84,7 +90,7 @@ public class Commit {
 
     public boolean containsProductionCode() {
         for (String file : files) {
-            Matcher m = FILENAME_PATTERN.matcher(file);
+            Matcher m = SOURCE_FILENAME_PATTERN.matcher(file);
             if (!m.matches())
                 continue;
             if (isSourceFile(m)) {

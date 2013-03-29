@@ -48,6 +48,13 @@ public class CommitTest {
     }
 
     @Test
+    public void knowsWhenCommitHasOnlyTests(){
+        Commit commit = new Commit(null, null, "com/example/File1Test.java");
+
+        assertTrue(commit.containsTests());
+    }
+
+    @Test
     public void knowsWhenCommitContainsProductionCode() {
         Commit commit = new Commit(null, null, "com/example/File1Test.java");
 

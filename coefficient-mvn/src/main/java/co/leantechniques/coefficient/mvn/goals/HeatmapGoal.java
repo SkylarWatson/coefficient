@@ -35,13 +35,6 @@ public class HeatmapGoal extends AbstractMojo {
      * @parameter expression="${basedir}"
      */
     private String scmRoot;
-    /**
-     * This is the SCM adapter to use (Mercurial, Git, etc.)
-     * For a list of valid SCM systems, please see co.leantechniques.coefficient.scm.CodeRepositoryFactoryTest.java
-     *
-     * @parameter expression="hg"
-     */
-    private String scmAdapter;
 
     /**
      * Number of past days to report on. The default is 90 days.
@@ -57,7 +50,7 @@ public class HeatmapGoal extends AbstractMojo {
         getLog().info("Generating heatmap in " + outputFile);
 
         try {
-            CodeRepository hg = factory.build(new WorkingDirectory(scmRoot, scmAdapter), rangeLimitInDays);
+            CodeRepository hg = factory.build(new WorkingDirectory(scmRoot), rangeLimitInDays);
             Heatmap heatmap = new Heatmap(hg, new FileWriter(outputFile()), "DE\\d+");
             heatmap.generate();
         } catch (IOException e) {

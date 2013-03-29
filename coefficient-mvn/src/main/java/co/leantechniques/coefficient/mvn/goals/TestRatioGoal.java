@@ -2,6 +2,8 @@ package co.leantechniques.coefficient.mvn.goals;
 
 import co.leantechniques.coefficeint.testratio.TestRatio;
 import co.leantechniques.coefficeint.testratio.TestRatioListener;
+import co.leantechniques.coefficient.scm.CodeRepositoryFactory;
+import co.leantechniques.coefficient.scm.WorkingDirectory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -25,6 +27,7 @@ public class TestRatioGoal extends AbstractMojo implements TestRatioListener {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         TestRatio testRatio = new TestRatio();
+        testRatio.setCodeRepository(new CodeRepositoryFactory().build(new WorkingDirectory("."), rangeLimitInDays));
         testRatio.setTestRatioListener(this);
         testRatio.calculate();
     }
