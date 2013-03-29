@@ -25,6 +25,11 @@
             <artifactId>coefficient-heatmap</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>co.leantechniques</groupId>
+            <artifactId>coefficient-test-ratios</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
