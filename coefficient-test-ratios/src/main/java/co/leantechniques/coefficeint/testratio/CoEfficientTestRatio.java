@@ -39,7 +39,7 @@ public class CoEfficientTestRatio implements TestRatioListener {
         if (bare)
             System.out.println(percentOfCommitsWithTests);
         else
-            System.out.println("Over the last " + dailyLimit + " days, " + percentOfCommitsWithTests + "% of commits contain tests");
+            System.out.println("Over the last " + dailyLimit + " days, " + percentOfCommitsWithTests + "% of the production source files committed contain tests");
     }
 
     @Override
