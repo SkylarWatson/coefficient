@@ -42,9 +42,17 @@ public class CommitTest {
 
     @Test
     public void knowsWhenCommitNotTested(){
-        Commit commitWithTest = new Commit(null, null, "com/example/File1.java");
+        Commit commit = new Commit(null, null, "com/example/File1.java");
 
-        assertFalse(commitWithTest.containsTests());
+        assertFalse(commit.containsTests());
+    }
+
+    @Test
+    public void knowsWhenCommitContainsProductionCode() {
+        Commit commit = new Commit(null, null, "com/example/File1Test.java");
+
+        assertFalse(commit.containsProductionCode());
+
     }
 
     @Test
@@ -52,19 +60,26 @@ public class CommitTest {
         Commit commit = new Commit(null, null, "com/example/File1.java",
                 "com/example/File1Test.java",
                 "com/example/File2.java",
-                "com/example/TestFile2.java",
+                "com/example/File2Test.java",
                 "com/example/File3.java");
 
         assertEquals(66, commit.getPercentFilesWIthTests());
     }
 
     @Test
-    public void doesntConsiderNonSourceFilesInCalculations() {
+    public void onlyConsidersSourceFilesInCalculations() {
         Commit commit = new Commit(null, null, "com/example/File1.java",
                 "com/example/File1Test.java",
                 "com/example/File2.properties",
                 "com/example/File3.xml",
                 "pom.xml");
+
+        assertEquals(100, commit.getPercentFilesWIthTests());
+    }
+
+    @Test                                            (expected=IllegalStateException.class)
+    public void considersCommitsThatContainsOnlyTests() {
+        Commit commit = new Commit(null, null, "com/example/File1Test.java");
 
         assertEquals(100, commit.getPercentFilesWIthTests());
     }

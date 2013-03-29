@@ -11,13 +11,19 @@ public class TestRatio {
 
     public void calculate() {
         int percentTested = 0;
-
+        int productionCommits = 0;
         Set<Commit> commits = codeRepository.getCommits();
-        for(Commit c : commits) {
-            percentTested += c.getPercentFilesWIthTests();
+        for (Commit c : commits) {
+            if (c.containsProductionCode()) {
+                productionCommits++;
+                percentTested += c.getPercentFilesWIthTests();
+            }
         }
 
-        testRatioListener.testRatioCalculated(percentTested / commits.size());
+        if (productionCommits == 0)
+            testRatioListener.nothingToTest();
+        else
+            testRatioListener.testRatioCalculated(percentTested / productionCommits);
     }
 
     public void setCodeRepository(co.leantechniques.coefficient.scm.CodeRepository codeRepository) {

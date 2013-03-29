@@ -41,4 +41,9 @@ public class CoEfficientTestRatio implements TestRatioListener {
         else
             System.out.println("Over the last " + dailyLimit + " days, " + percentOfCommitsWithTests + "% of commits contain tests");
     }
+
+    @Override
+    public void nothingToTest() {
+        System.out.println("No production code was found in commit history. Nothing to calculate.");
+    }
 }

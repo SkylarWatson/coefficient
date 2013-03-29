@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 public class TestRatioTest {
     @Test
-    public void doesStuff() {
+    public void calculatesTheRatioOfTests() {
         CodeRepository repo = mock(CodeRepository.class);
         TestRatioListener listener = mock(TestRatioListener.class);
 
@@ -31,4 +31,43 @@ public class TestRatioTest {
         verify(listener).testRatioCalculated(50);
     }
 
+    @Test
+    public void ignoresCommitsWithoutProductionCode() {
+        CodeRepository repo = mock(CodeRepository.class);
+        TestRatioListener listener = mock(TestRatioListener.class);
+
+        TestRatio ratio = new TestRatio();
+        ratio.setCodeRepository(repo);
+        ratio.setTestRatioListener(listener);
+
+        HashSet<Commit> commits = new HashSet<Commit>();
+        commits.add(new Commit("Brandon", "DE1234", "com/example/File1.java", "com/example/File1Test.java"));
+        commits.add(new Commit("Brandon", "US1234", "com/example/File2Test.java"));
+
+        when(repo.getCommits()).thenReturn(commits);
+
+        ratio.calculate();
+
+        verify(listener).testRatioCalculated(100);
+    }
+
+
+    @Test
+    public void handlesCommitsWithNoProductionCode() {
+        CodeRepository repo = mock(CodeRepository.class);
+        TestRatioListener listener = mock(TestRatioListener.class);
+
+        TestRatio ratio = new TestRatio();
+        ratio.setCodeRepository(repo);
+        ratio.setTestRatioListener(listener);
+
+        HashSet<Commit> commits = new HashSet<Commit>();
+        commits.add(new Commit("Brandon", "DE1234", "pom.xml", "com/example/File1Test.java"));
+
+        when(repo.getCommits()).thenReturn(commits);
+
+        ratio.calculate();
+
+        verify(listener).nothingToTest();
+    }
 }

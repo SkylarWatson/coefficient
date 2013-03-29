@@ -1,12 +1,14 @@
 package co.leantechniques.coefficient.scm;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Commit {
+    public static final Pattern FILENAME_PATTERN = Pattern.compile(".*/(\\w+?)(Test)?\\.(\\w+)");
     private String message;
     private final Set<String> files;
     private final String author;
@@ -18,7 +20,7 @@ public class Commit {
     }
 
     public String getStory() {
-        if(message == null) return "Unknown";
+        if (message == null) return "Unknown";
         Matcher matcher = Pattern.compile("(US|DE)\\d+").matcher(message);
         boolean wasFound = matcher.find();
         if (wasFound)
@@ -40,34 +42,58 @@ public class Commit {
     }
 
     public int getPercentFilesWIthTests() {
-        Pattern p = Pattern.compile(".*/(Test)?(\\w+?)(Test)?\\.(\\w+)");
-        double numberOfSourceFilesChanged = 0;
-        double numberOfUnitTests = 0;
-        for(String file : files) {
-            Matcher m = p.matcher(file);
-            if(!m.matches())
+        HashSet<String> productionFiles = new HashSet<String>();
+        HashSet<String> testFiles = new HashSet<String>();
+        for (String file : files) {
+            Matcher m = FILENAME_PATTERN.matcher(file);
+            if (!m.matches())
                 continue;
-            if(isSourceFile(m)) {
-                numberOfSourceFilesChanged++;
-                if(isTestFile(m)) {
-                    numberOfUnitTests++;
+            String baseName = m.group(1);
+            if (isSourceFile(m)) {
+                if (isTestFile(m)) {
+                    testFiles.add(baseName);
+                } else {
+                    productionFiles.add(baseName);
                 }
             }
         }
 
-        double numberOfProductionClasses = ((int) numberOfSourceFilesChanged - (int) numberOfUnitTests);
+        if (productionFiles.isEmpty()) {
+            throw new IllegalStateException("No production classes found in this commit!");
+        }
 
-        if(numberOfProductionClasses == 0)
-            return 100;
+        return ratioAsPercentage(testFiles.size(), productionFiles.size());
+    }
 
-        return (int) (((numberOfUnitTests / (int) numberOfProductionClasses) * 100));
+    private int ratioAsPercentage(double numberOfTestFiles, double numberOfProductionFiles) {
+        double ratio = numberOfTestFiles / numberOfProductionFiles;
+        return toWholeNumber(ratio);
+    }
+
+    private int toWholeNumber(double ratio) {
+        return (int) (ratio * 100);
     }
 
     private boolean isTestFile(Matcher m) {
-        return m.group(1) != null || m.group(3) != null;
+        return m.group(2) != null;
     }
 
     private boolean isSourceFile(Matcher m) {
-        return m.group(4).equals("java");
+        return m.group(3).equals("java");
+    }
+
+    public boolean containsProductionCode() {
+        for (String file : files) {
+            Matcher m = FILENAME_PATTERN.matcher(file);
+            if (!m.matches())
+                continue;
+            if (isSourceFile(m)) {
+                if (!isTestFile(m)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
