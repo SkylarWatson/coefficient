@@ -68,6 +68,6 @@ public class TestRatioTest {
 
         ratio.calculate();
 
-        verify(listener).nothingToTest();
+        verify(listener).noProductionSourceCommitted();
     }
 }

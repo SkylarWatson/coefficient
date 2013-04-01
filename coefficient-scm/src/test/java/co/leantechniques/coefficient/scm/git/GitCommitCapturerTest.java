@@ -1,8 +1,6 @@
 package co.leantechniques.coefficient.scm.git;
 
 import co.leantechniques.coefficient.scm.Commit;
-import co.leantechniques.coefficient.scm.git.GitCommitBuilder;
-import co.leantechniques.coefficient.scm.git.GitCommitCapturer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,22 +22,22 @@ public class GitCommitCapturerTest {
 
     @Test
     public void shouldCaptureAllTheCommitsInTheLog() {
-        GitCommitBuilder commit = new GitCommitBuilder().author("Joe Blow").message("US123 statement").file("src/com/blah.Blah.java");
+        GitCommitBuilder commit = new GitCommitBuilder().author("Joe Blow").message("US123 statement").file("src/com/blah/Blah.java");
         GitCommitBuilder otherCommit = new GitCommitBuilder().author("Jim Bob").message("US321 statement").file("src/com/blah/Foo.java");
         Set<Commit> commits = processCommitLog(commit, otherCommit);
 
         assertEquals(2, commits.size());
         Iterator<Commit> iterator = commits.iterator();
-        assertCommit(iterator.next(), "Joe Blow", "US123", "src/com/blah.Blah.java");
+        assertCommit(iterator.next(), "Joe Blow", "US123", "src/com/blah/Blah.java");
         assertCommit(iterator.next(), "Jim Bob", "US321", "src/com/blah/Foo.java");
     }
 
     @Test
     public void shouldCaptureAllLinesOfTheCommitMessage() {
-        Set<Commit> commits = processCommitLog(new GitCommitBuilder().author("Joe Blow").message("US123 statement", "US321 other statement").file("src/com/blah.Blah.java"));
+        Set<Commit> commits = processCommitLog(new GitCommitBuilder().author("Joe Blow").message("US123 statement", "US321 other statement").file("src/com/blah/Blah.java"));
 
         assertEquals(1, commits.size());
-        assertCommit(commits.iterator().next(), "Joe Blow", "US123", "src/com/blah.Blah.java");
+        assertCommit(commits.iterator().next(), "Joe Blow", "US123", "src/com/blah/Blah.java");
     }
 
     @Test

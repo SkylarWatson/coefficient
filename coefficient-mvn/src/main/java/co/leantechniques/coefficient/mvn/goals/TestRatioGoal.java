@@ -38,7 +38,7 @@ public class TestRatioGoal extends AbstractMojo implements TestRatioListener {
     }
 
     @Override
-    public void nothingToTest() {
+    public void noProductionSourceCommitted() {
         getLog().info("No production code was found in commit history. Nothing to calculate.");
     }
 }

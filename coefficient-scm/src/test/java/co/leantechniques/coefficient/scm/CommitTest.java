@@ -1,6 +1,7 @@
 package co.leantechniques.coefficient.scm;
 
 import co.leantechniques.coefficient.core.Environment;
+import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.Set;
@@ -8,8 +9,10 @@ import java.util.Set;
 import static junit.framework.Assert.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CommitTest {
     @Test
@@ -63,32 +66,46 @@ public class CommitTest {
     }
 
     @Test
-    public void knowsThePercentageOfSourceFilesThatHaveTests() {
+    public void knowsWhichFilesAreProduction() {
         Commit commit = new Commit(null, null, "com/example/File1.java",
                 "com/example/File1Test.java",
                 "com/example/File2.java",
                 "com/example/File2Test.java",
                 "com/example/File3.java");
 
-        assertEquals(66, commit.getPercentFilesWIthTests());
+        Set<String> changes = commit.getProductionSourceFiles();
+
+        assertEquals(3, changes.size());
+        assertTrue(changes.contains("com/example/File1.java"));
+        assertTrue(changes.contains("com/example/File2.java"));
+        assertTrue(changes.contains("com/example/File3.java"));
     }
 
     @Test
-    public void onlyConsidersSourceFilesInCalculations() {
+    public void knowsWhichFilesAreTests() {
         Commit commit = new Commit(null, null, "com/example/File1.java",
                 "com/example/File1Test.java",
-                "com/example/File2.properties",
-                "com/example/File3.xml",
-                "pom.xml");
+                "com/example/File2.java",
+                "com/example/File2Test.java",
+                "com/example/File3.java");
 
-        assertEquals(100, commit.getPercentFilesWIthTests());
+        Set<String> changes = commit.getTestSourceFiles();
+
+        assertEquals(2, changes.size());
+        assertTrue(changes.contains("com/example/File1Test.java"));
+        assertTrue(changes.contains("com/example/File2Test.java"));
     }
 
-    @Test                                            (expected=IllegalStateException.class)
-    public void considersCommitsThatContainsOnlyTests() {
-        Commit commit = new Commit(null, null, "com/example/File1Test.java");
+    @Test
+    public void supportsFilesInTheCurrentDirectory() {
+        Commit commitWithTest = new Commit(null, null, "pom.xml");
+        assertFalse(commitWithTest.containsProductionCode());
+    }
 
-        assertEquals(100, commit.getPercentFilesWIthTests());
+    @Test
+    public void supportsFilesWithNestedPeriodsInTheFilename() {
+        Commit commitWithTest = new Commit(null, null, "help-files.tar.gz");
+        assertFalse(commitWithTest.containsProductionCode());
     }
 
     @Test

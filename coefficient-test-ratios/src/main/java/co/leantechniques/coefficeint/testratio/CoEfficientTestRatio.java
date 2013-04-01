@@ -43,7 +43,7 @@ public class CoEfficientTestRatio implements TestRatioListener {
     }
 
     @Override
-    public void nothingToTest() {
+    public void noProductionSourceCommitted() {
         System.out.println("No production code was found in commit history. Nothing to calculate.");
     }
 }
